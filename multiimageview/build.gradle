@@ -53,7 +53,7 @@ publish {
     artifactId = 'multiimageview'
     publishVersion = '0.1'
     desc = 'Library for display a few images in one MultiImageView like avatar of group chat'
-    licences = ['Apache-2.0']
+//    licences = ['Apache-2.0']
     uploadName='MultiImageView'
     website = 'https://github.com/stfalcon-studio/MultiImageView.git'
 }
