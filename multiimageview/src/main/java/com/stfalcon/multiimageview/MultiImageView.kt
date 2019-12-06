@@ -23,6 +23,10 @@ import android.media.ThumbnailUtils
 import android.util.AttributeSet
 import android.widget.ImageView
 import java.util.*
+import android.graphics.Bitmap
+import android.graphics.RectF
+import kotlin.math.max
+
 
 /**
  * Created by Anton Bevza on 12/22/16.
@@ -102,7 +106,8 @@ class MultiImageView(context: Context, attrs: AttributeSet) : ImageView(context,
     }
 }
 
-class MultiDrawable(val bitmaps: ArrayList<Bitmap>) : Drawable() {
+class MultiDrawable(private val bitmaps: ArrayList<Bitmap>) : Drawable() {
+
     private val paint = Paint(Paint.ANTI_ALIAS_FLAG)
     private val items = ArrayList<PhotoItem>()
 
@@ -111,47 +116,87 @@ class MultiDrawable(val bitmaps: ArrayList<Bitmap>) : Drawable() {
      */
     private fun init() {
         items.clear()
-        if (bitmaps.size == 1) {
-            val bitmap = scaleCenterCrop(bitmaps[0], bounds.width(), bounds.height())
-            items.add(PhotoItem(bitmap, Rect(0, 0, bounds.width(), bounds.height())))
-        } else if (bitmaps.size == 2) {
-            val bitmap1 = scaleCenterCrop(bitmaps[0], bounds.width(), bounds.height() / 2)
-            val bitmap2 = scaleCenterCrop(bitmaps[1], bounds.width(), bounds.height() / 2)
-            items.add(PhotoItem(bitmap1, Rect(0, 0, bounds.width() / 2, bounds.height())))
-            items.add(PhotoItem(bitmap2, Rect(bounds.width() / 2, 0, bounds.width(), bounds.height())))
-        } else if (bitmaps.size == 3) {
-            val bitmap1 = scaleCenterCrop(bitmaps[0], bounds.width(), bounds.height() / 2)
-            val bitmap2 = scaleCenterCrop(bitmaps[1], bounds.width() / 2, bounds.height() / 2)
-            val bitmap3 = scaleCenterCrop(bitmaps[2], bounds.width() / 2, bounds.height() / 2)
-            items.add(PhotoItem(bitmap1, Rect(0, 0, bounds.width() / 2, bounds.height())))
-            items.add(PhotoItem(bitmap2, Rect(bounds.width() / 2, 0, bounds.width(), bounds.height() / 2)))
-            items.add(PhotoItem(bitmap3, Rect(bounds.width() / 2, bounds.height() / 2, bounds.width(), bounds.height())))
-        }
-        if (bitmaps.size == 4) {
-            val bitmap1 = scaleCenterCrop(bitmaps[0], bounds.width() / 2, bounds.height() / 2)
-            val bitmap2 = scaleCenterCrop(bitmaps[1], bounds.width() / 2, bounds.height() / 2)
-            val bitmap3 = scaleCenterCrop(bitmaps[2], bounds.width() / 2, bounds.height() / 2)
-            val bitmap4 = scaleCenterCrop(bitmaps[3], bounds.width() / 2, bounds.height() / 2)
-            items.add(PhotoItem(bitmap1, Rect(0, 0, bounds.width() / 2, bounds.height() / 2)))
-            items.add(PhotoItem(bitmap2, Rect(0, bounds.height() / 2, bounds.width() / 2, bounds.height())))
-            items.add(PhotoItem(bitmap3, Rect(bounds.width() / 2, 0, bounds.width(), bounds.height() / 2)))
-            items.add(PhotoItem(bitmap4, Rect(bounds.width() / 2, bounds.height() / 2, bounds.width(), bounds.height())))
+        paint.isAntiAlias = true
+        paint.isFilterBitmap = true
+        paint.isDither = true
+
+        when {
+            bitmaps.size == 1 -> {
+                val bitmap = scaleCenterCrop(bitmaps[0], bounds.width(), bounds.height())
+                items.add(PhotoItem(bitmap, Rect(0, 0, bounds.width(), bounds.height())))
+            }
+            bitmaps.size == 2 -> {
+                val bitmap1 = scaleCenterCrop(bitmaps[0], bounds.width() / 2, bounds.height())
+                val bitmap2 = scaleCenterCrop(bitmaps[1], bounds.width() / 2, bounds.height())
+                items.add(PhotoItem(bitmap1, Rect(0, 0, bounds.width(), bounds.height())))
+                items.add(PhotoItem(bitmap2, Rect(bounds.width() / 2, 0, bounds.width() + bounds.width() / 2, bounds.height())))
+            }
+            bitmaps.size == 3 -> {
+                val bitmap1 = scaleCenterCrop(bitmaps[0], bounds.width() / 2, bounds.height())
+                val bitmap2 = scaleCenterCrop(bitmaps[1], bounds.width(), bounds.height())
+                val bitmap3 = scaleCenterCrop(bitmaps[2], bounds.width(), bounds.height())
+                items.add(PhotoItem(bitmap1, Rect(0, 0, bounds.width(), bounds.height())))
+                items.add(PhotoItem(bitmap2, Rect(bounds.width() / 2, 0, bounds.width(), bounds.height() / 2)))
+                items.add(PhotoItem(bitmap3, Rect(bounds.width() / 2, bounds.height() / 2, bounds.width(), bounds.height())))
+            }
+            bitmaps.size == 4 -> {
+                val bitmap1 = scaleCenterCrop(bitmaps[0], bounds.width(), bounds.height())
+                val bitmap2 = scaleCenterCrop(bitmaps[1], bounds.width(), bounds.height())
+                val bitmap3 = scaleCenterCrop(bitmaps[2], bounds.width(), bounds.height())
+                val bitmap4 = scaleCenterCrop(bitmaps[3], bounds.width(), bounds.height())
+                items.add(PhotoItem(bitmap1, Rect(0, 0, bounds.width() / 2, bounds.height() / 2)))
+                items.add(PhotoItem(bitmap2, Rect(0, bounds.height() / 2, bounds.width() / 2, bounds.height())))
+                items.add(PhotoItem(bitmap3, Rect(bounds.width() / 2, 0, bounds.width(), bounds.height() / 2)))
+                items.add(PhotoItem(bitmap4, Rect(bounds.width() / 2, bounds.height() / 2, bounds.width(), bounds.height())))
+            }
         }
     }
 
-    override fun draw(canvas: Canvas?) {
-        if (canvas != null) {
-            items.forEach {
-                canvas.drawBitmap(it.bitmap, bounds, it.position, paint)
-            }
+    override fun draw(canvas: Canvas) {
+        items.forEach {
+            canvas.drawBitmap(it.bitmap, bounds, it.position, paint)
         }
     }
 
     /**
      * scale and center crop image
      */
-    private fun scaleCenterCrop(source: Bitmap, newHeight: Int, newWidth: Int): Bitmap {
-        return ThumbnailUtils.extractThumbnail(source, newWidth, newHeight)
+//    private fun scaleCenterCrop(source: Bitmap, newHeight: Int, newWidth: Int): Bitmap {
+//        return ThumbnailUtils.extractThumbnail(source, newWidth, newHeight)
+//    }
+
+
+    private fun scaleCenterCrop(source: Bitmap, newWidth : Int, newHeight : Int): Bitmap {
+        val sourceWidth = source.width
+        val sourceHeight = source.height
+
+        // Compute the scaling factors to fit the new height and width, respectively.
+        // To cover the final image, the final scaling will be the bigger
+        // of these two.
+        val xScale = newWidth.toFloat() / sourceWidth
+        val yScale = newHeight.toFloat() / sourceHeight
+        val scale = max(xScale, yScale)
+
+        // Now get the size of the source bitmap when scaled
+        val scaledWidth = scale * sourceWidth
+        val scaledHeight = scale * sourceHeight
+
+        // Let's find out the upper left coordinates if the scaled bitmap
+        // should be centered in the new size give by the parameters
+        val left = (newWidth - scaledWidth) / 2
+        val top = (newHeight - scaledHeight) / 2
+
+        // The target rectangle for the new, scaled version of the source bitmap will now
+        // be
+        val targetRect = RectF(left, top, left + scaledWidth, top + scaledHeight)
+
+        // Finally, we create a new bitmap of the specified size and draw our new,
+        // scaled bitmap onto it.
+        val dest = Bitmap.createBitmap(newWidth, newHeight, source.config)
+        val canvas = Canvas(dest)
+        canvas.drawBitmap(source, null, targetRect, null)
+
+        return dest
     }
 
     /***
@@ -172,9 +217,12 @@ class MultiDrawable(val bitmaps: ArrayList<Bitmap>) : Drawable() {
 
     override fun getOpacity() = PixelFormat.TRANSLUCENT
 
-    override fun setColorFilter(colorFilter: ColorFilter) {
+    override fun setColorFilter(colorFilter: ColorFilter?) {
         paint.colorFilter = colorFilter
     }
+
+
+
     //***------------------***//
 }
 
