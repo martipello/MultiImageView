@@ -145,8 +145,8 @@ class MultiDrawable(private val bitmaps: ArrayList<Bitmap>) : Drawable() {
                 val bitmap3 = scaleCenterCrop(bitmaps[2], bounds.width(), bounds.height())
                 val bitmap4 = scaleCenterCrop(bitmaps[3], bounds.width(), bounds.height())
                 items.add(PhotoItem(bitmap1, Rect(0, 0, bounds.width() / 2, bounds.height() / 2)))
-                items.add(PhotoItem(bitmap2, Rect(0, bounds.height() / 2, bounds.width() / 2, bounds.height())))
-                items.add(PhotoItem(bitmap3, Rect(bounds.width() / 2, 0, bounds.width(), bounds.height() / 2)))
+                items.add(PhotoItem(bitmap3, Rect(0, bounds.height() / 2, bounds.width() / 2, bounds.height())))
+                items.add(PhotoItem(bitmap2, Rect(bounds.width() / 2, 0, bounds.width(), bounds.height() / 2)))
                 items.add(PhotoItem(bitmap4, Rect(bounds.width() / 2, bounds.height() / 2, bounds.width(), bounds.height())))
             }
         }
