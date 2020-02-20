@@ -19,12 +19,9 @@ package com.stfalcon.multiimageview
 import android.content.Context
 import android.graphics.*
 import android.graphics.drawable.Drawable
-import android.media.ThumbnailUtils
 import android.util.AttributeSet
 import android.widget.ImageView
 import java.util.*
-import android.graphics.Bitmap
-import android.graphics.RectF
 import kotlin.math.max
 
 
@@ -56,11 +53,26 @@ class MultiImageView(context: Context, attrs: AttributeSet) : ImageView(context,
     }
 
     /**
+     * Add image to view
+     */
+    fun addAllImages(bitmaps: MutableList<Bitmap>) {
+        this.bitmaps.addAll(bitmaps)
+        refresh()
+    }
+
+    /**
      * Remove all images
      */
     fun clear() {
         bitmaps.clear()
         refresh()
+    }
+
+    /**
+     * Get images count
+     */
+    fun getBitmapCount(): Int {
+        return bitmaps.size
     }
 
     override fun onAttachedToWindow() {
@@ -139,7 +151,7 @@ class MultiDrawable(private val bitmaps: ArrayList<Bitmap>) : Drawable() {
                 items.add(PhotoItem(bitmap2, Rect(bounds.width() / 2, 0, bounds.width(), bounds.height() / 2)))
                 items.add(PhotoItem(bitmap3, Rect(bounds.width() / 2, bounds.height() / 2, bounds.width(), bounds.height())))
             }
-            bitmaps.size == 4 -> {
+            bitmaps.size > 3 -> {
                 val bitmap1 = scaleCenterCrop(bitmaps[0], bounds.width(), bounds.height())
                 val bitmap2 = scaleCenterCrop(bitmaps[1], bounds.width(), bounds.height())
                 val bitmap3 = scaleCenterCrop(bitmaps[2], bounds.width(), bounds.height())
@@ -166,7 +178,7 @@ class MultiDrawable(private val bitmaps: ArrayList<Bitmap>) : Drawable() {
 //    }
 
 
-    private fun scaleCenterCrop(source: Bitmap, newWidth : Int, newHeight : Int): Bitmap {
+    private fun scaleCenterCrop(source: Bitmap, newWidth: Int, newHeight: Int): Bitmap {
         val sourceWidth = source.width
         val sourceHeight = source.height
 
@@ -220,7 +232,6 @@ class MultiDrawable(private val bitmaps: ArrayList<Bitmap>) : Drawable() {
     override fun setColorFilter(colorFilter: ColorFilter?) {
         paint.colorFilter = colorFilter
     }
-
 
 
     //***------------------***//

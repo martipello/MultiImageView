@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_navigation"
+    app:startDestination="@id/mainFragment">
+
+    <fragment
+        android:id="@+id/mainFragment"
+        android:name="com.stfalcon.multiimageview.sample.MainFragment"
+        android:label="Main Fragment">
+        <action
+            android:id="@+id/action_mainFragment_to_recyclerViewExample"
+            app:destination="@id/recyclerViewExample"
+            app:popUpTo="@+id/mainFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/recyclerViewExample"
+        android:name="com.stfalcon.multiimageview.sample.RecyclerViewExample"
+        android:label="Recycler View Example"
+        tools:layout="@layout/recycler_view_layout">
+        <action
+            android:id="@+id/action_recyclerViewExample_to_previewFragment"
+            app:destination="@id/previewFragment"
+            app:popUpTo="@+id/recyclerViewExample" />
+    </fragment>
+    <fragment
+        android:id="@+id/previewFragment"
+        android:name="com.stfalcon.multiimageview.sample.PreviewFragment"
+        android:label="Preview"
+        tools:layout="@layout/preview_layout">
+        <argument
+            android:name="MultiImageViewModel"
+            android:defaultValue="@null"
+            app:argType="com.stfalcon.multiimageview.sample.models.MultiImageViewModel"
+            app:nullable="true" />
+    </fragment>
+</navigation>
