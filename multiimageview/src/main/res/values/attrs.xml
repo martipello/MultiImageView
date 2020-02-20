@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="MultiImageView">
+        <attr name="badge_color" format="color" />
+        <attr name="badge_location" format="enum">
+            <enum name="topRight" value="0" />
+            <enum name="topLeft" value="1" />
+            <enum name="bottomRight" value="2" />
+            <enum name="bottomLeft" value="3" />
+        </attr>
+        <attr name="badge_text_color" format="color" />
+        <attr name="badge_shown_from_count" format="integer" />
+        <attr name="badge_shown_to_count" format="integer" />
+    </declare-styleable>
+
+</resources>

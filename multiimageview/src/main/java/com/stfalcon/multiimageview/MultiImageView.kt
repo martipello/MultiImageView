@@ -19,7 +19,9 @@ package com.stfalcon.multiimageview
 import android.content.Context
 import android.graphics.*
 import android.graphics.drawable.Drawable
+import android.os.Build
 import android.util.AttributeSet
+import android.util.TypedValue
 import android.widget.ImageView
 import java.util.*
 import kotlin.math.max
@@ -29,7 +31,13 @@ import kotlin.math.max
  * Created by Anton Bevza on 12/22/16.
  */
 
-class MultiImageView(context: Context, attrs: AttributeSet) : ImageView(context, attrs) {
+class MultiImageView @JvmOverloads constructor (context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) : ImageView(context, attrs) {
+
+    val TOP_RIGHT = 0
+    val TOP_LEFT = 1
+    val BOTTOM_RIGHT = 2
+    val BOTTOM_LEFT = 3
+
     //Shape of view
     var shape = Shape.NONE
         set(value) {
@@ -75,10 +83,29 @@ class MultiImageView(context: Context, attrs: AttributeSet) : ImageView(context,
         return bitmaps.size
     }
 
-    override fun onAttachedToWindow() {
-        super.onAttachedToWindow()
-        refresh()
+    /**
+     * Get images count
+     */
+    fun setBadgeText() {
+
     }
+
+//    override fun onAttachedToWindow() {
+//        super.onAttachedToWindow()
+//        refresh()
+//    }
+
+    init {
+        attrs?.let {
+            val typedArray = context.obtainStyledAttributes(it, R.styleable.MultiImageView)
+            val badgeColor = typedArray.getColor(R.styleable.MultiImageView_badge_color, getThemeAccentColor(context))
+            val badgeTextColor = typedArray.getColor(R.styleable.MultiImageView_badge_text_color, android.R.attr.textColor)
+            val badgeLocation = typedArray.getString(R.styleable.MultiImageView_badge_location)
+            val badgeMinCount = typedArray.getInt(R.styleable.MultiImageView_badge_shown_from_count, 4)
+            val badgeMaxCount = typedArray.getInt(R.styleable.MultiImageView_badge_shown_to_count, 9)
+        }
+    }
+
 
     /**
      * recreate MultiDrawable and set it as Drawable to ImageView
@@ -111,6 +138,20 @@ class MultiImageView(context: Context, attrs: AttributeSet) : ImageView(context,
             }
         }
     }
+
+
+    private fun getThemeAccentColor(context: Context): Int {
+        val colorAttr: Int = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            android.R.attr.colorAccent
+        } else {
+            //Get colorAccent defined for AppCompat
+            context.resources.getIdentifier("colorAccent", "attr", context.packageName)
+        }
+        val outValue = TypedValue()
+        context.theme.resolveAttribute(colorAttr, outValue, true)
+        return outValue.data
+    }
+
 
     //Types of shape
     enum class Shape {
@@ -168,6 +209,8 @@ class MultiDrawable(private val bitmaps: ArrayList<Bitmap>) : Drawable() {
         items.forEach {
             canvas.drawBitmap(it.bitmap, bounds, it.position, paint)
         }
+
+
     }
 
     /**
