@@ -10,10 +10,10 @@ to create the image view in xml
         app:shape="rectangle"
         app:corner_radius="60" />
         
-![Image description](https://github.com/martipello/MultiImageView/blob/master/sample/src/main/res/drawable/Screenshot_1582383274.png)
+![Image description](https://github.com/martipello/MultiImageView/blob/master/sample/src/main/res/drawable/screenshot_1582383274.png)
 
         
-![Image description](https://github.com/martipello/MultiImageView/blob/master/sample/src/main/res/drawable/Screenshot_1582383283.png)
+![Image description](https://github.com/martipello/MultiImageView/blob/master/sample/src/main/res/drawable/screenshot_1582383283.png)
 
 
 to add an image use 
@@ -26,5 +26,5 @@ to clear images use
    
 the corner radius only applys to the rectangle shape other wise it will be ignored you can set this in xml or programmatically
         
-![Image description](https://github.com/martipello/MultiImageView/blob/master/sample/src/main/res/drawable/Screenshot_1582383289.png)
+![Image description](https://github.com/martipello/MultiImageView/blob/master/sample/src/main/res/drawable/screenshot_1582383289.png)
 
