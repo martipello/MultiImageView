@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +21,7 @@ import androidx.navigation.ui.NavigationUI;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.stfalcon.multiimageview.MultiImageView;
 import com.stfalcon.multiimageview.sample.adapters.MultiImageViewAdapter;
 import com.stfalcon.multiimageview.sample.decorator.MultiImageViewItemDecorator;
 import com.stfalcon.multiimageview.sample.glide.GlideApp;
@@ -38,6 +40,7 @@ public class RecyclerViewExample extends Fragment implements ClickHelper {
     private MultiImageViewAdapter multiImageViewAdapter;
     private int[] avatars = new int[]{R.drawable.avatar1,R.drawable.avatar2,R.drawable.avatar3,R.drawable.avatar4};
     private int[] structuredImageListCount = new int[]{1,2,3,4,1,2,3,4,1,2};
+    private String TAG = "RecyclerViewExample";
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -87,10 +90,10 @@ public class RecyclerViewExample extends Fragment implements ClickHelper {
 
     private LinkedList<MultiImageViewModel> createStructuredModelList(){
         LinkedList<MultiImageViewModel> modelList = new LinkedList<>();
-        for (int i = 0; i < 10; i++){
+        for (int i = 0; i < 30; i++){
             MultiImageViewModel model = new MultiImageViewModel();
             model.setId("id-" + i);
-            model.setImages(createStructuredImageList(structuredImageListCount[i]));
+            model.setImages(createStructuredImageList(structuredImageListCount[i / 3]));
             modelList.add(model);
         }
         return modelList;
@@ -141,6 +144,8 @@ public class RecyclerViewExample extends Fragment implements ClickHelper {
 
     @Override
     public void click(View v, int position) {
+        MultiImageView multiImageView = v.findViewById(R.id.iv);
+        Log.d(TAG,"multiImageView bitmap count " + multiImageView.getBitmapCount());
         navigateToPreview(multiImageViewAdapter.getItem(position), v);
     }
 }

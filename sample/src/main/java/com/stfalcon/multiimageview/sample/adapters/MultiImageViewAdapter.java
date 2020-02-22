@@ -47,7 +47,7 @@ public class MultiImageViewAdapter extends RecyclerView.Adapter<MyMultiImageView
     @Override
     public void onBindViewHolder(@NonNull final MyMultiImageViewHolder holder, int position) {
         MultiImageViewModel model = multiImageViewModels.get(position);
-        Log.d(TAG,"image view bitmap count " + holder.multiImageView.getBitmapCount());
+        holder.multiImageView.clear();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             holder.multiImageView.setTransitionName("transitionName-" + model.getId());
         }

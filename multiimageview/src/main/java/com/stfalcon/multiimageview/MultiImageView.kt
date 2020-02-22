@@ -17,6 +17,7 @@
 package com.stfalcon.multiimageview
 
 import android.content.Context
+import android.content.res.TypedArray
 import android.graphics.*
 import android.graphics.drawable.Drawable
 import android.os.Build
@@ -84,7 +85,7 @@ class MultiImageView @JvmOverloads constructor (context: Context, attrs: Attribu
     }
 
     /**
-     * Get images count
+     * Set badge text
      */
     fun setBadgeText() {
 
@@ -97,12 +98,16 @@ class MultiImageView @JvmOverloads constructor (context: Context, attrs: Attribu
 
     init {
         attrs?.let {
+            bitmaps.clear()
             val typedArray = context.obtainStyledAttributes(it, R.styleable.MultiImageView)
+            shape = typedArray.getEnum(R.styleable.MultiImageView_shape, Shape.NONE)
+            rectCorners = typedArray.getInt(R.styleable.MultiImageView_corner_radius, 100)
             val badgeColor = typedArray.getColor(R.styleable.MultiImageView_badge_color, getThemeAccentColor(context))
             val badgeTextColor = typedArray.getColor(R.styleable.MultiImageView_badge_text_color, android.R.attr.textColor)
             val badgeLocation = typedArray.getString(R.styleable.MultiImageView_badge_location)
             val badgeMinCount = typedArray.getInt(R.styleable.MultiImageView_badge_shown_from_count, 4)
             val badgeMaxCount = typedArray.getInt(R.styleable.MultiImageView_badge_shown_to_count, 9)
+            typedArray.recycle()
         }
     }
 
@@ -157,6 +162,10 @@ class MultiImageView @JvmOverloads constructor (context: Context, attrs: Attribu
     enum class Shape {
         CIRCLE, RECTANGLE, NONE
     }
+
+    inline fun <reified T : Enum<T>> TypedArray.getEnum(index: Int, default: T) =
+            getInt(index, -1).let { if (it >= 0) enumValues<T>()[it] else default
+            }
 }
 
 class MultiDrawable(private val bitmaps: ArrayList<Bitmap>) : Drawable() {

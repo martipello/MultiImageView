@@ -17,8 +17,6 @@ public class MyMultiImageViewHolder extends RecyclerView.ViewHolder {
         super(itemView);
         multiImageView = itemView.findViewById(R.id.iv);
         multiImageView.clear();
-        multiImageView.setShape(MultiImageView.Shape.RECTANGLE);
-        multiImageView.setRectCorners(8);
         multiImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

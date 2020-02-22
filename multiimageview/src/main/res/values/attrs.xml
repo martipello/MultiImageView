@@ -2,6 +2,12 @@
 <resources>
 
     <declare-styleable name="MultiImageView">
+        <attr name="shape" format="enum">
+            <enum name="circle" value="0" />
+            <enum name="rectangle" value="1" />
+            <enum name="none" value="2" />
+        </attr>
+        <attr name="corner_radius" format="integer" />
         <attr name="badge_color" format="color" />
         <attr name="badge_location" format="enum">
             <enum name="topRight" value="0" />
