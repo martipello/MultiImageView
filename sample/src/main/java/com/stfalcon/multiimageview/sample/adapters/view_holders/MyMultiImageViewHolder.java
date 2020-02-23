@@ -9,9 +9,12 @@ import com.stfalcon.multiimageview.MultiImageView;
 import com.stfalcon.multiimageview.sample.R;
 import com.stfalcon.multiimageview.sample.helpers.ClickHelper;
 
+import java.util.concurrent.atomic.AtomicInteger;
+
 public class MyMultiImageViewHolder extends RecyclerView.ViewHolder {
 
     public MultiImageView multiImageView;
+    public AtomicInteger imageSetCounter = new AtomicInteger(0);
 
     public MyMultiImageViewHolder(@NonNull View itemView, final ClickHelper clickHelper) {
         super(itemView);

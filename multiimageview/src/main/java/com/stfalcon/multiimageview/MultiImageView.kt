@@ -65,6 +65,7 @@ class MultiImageView @JvmOverloads constructor (context: Context, attrs: Attribu
      * Add image to view
      */
     fun addAllImages(bitmaps: MutableList<Bitmap>) {
+        this.bitmaps.clear()
         this.bitmaps.addAll(bitmaps)
         refresh()
     }

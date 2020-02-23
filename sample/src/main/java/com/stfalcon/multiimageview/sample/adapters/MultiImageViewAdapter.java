@@ -20,7 +20,9 @@ import com.stfalcon.multiimageview.sample.adapters.view_holders.MyMultiImageView
 import com.stfalcon.multiimageview.sample.helpers.ClickHelper;
 import com.stfalcon.multiimageview.sample.models.MultiImageViewModel;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class MultiImageViewAdapter extends RecyclerView.Adapter<MyMultiImageViewHolder> {
 
@@ -48,21 +50,52 @@ public class MultiImageViewAdapter extends RecyclerView.Adapter<MyMultiImageView
     public void onBindViewHolder(@NonNull final MyMultiImageViewHolder holder, int position) {
         MultiImageViewModel model = multiImageViewModels.get(position);
         holder.multiImageView.clear();
+        holder.imageSetCounter.set(0);
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             holder.multiImageView.setTransitionName("transitionName-" + model.getId());
         }
-        for (Integer s : model.getImages()){
-            setImages(holder, s);
+
+        if (!model.getImages().isEmpty()){
+//            setImages(holder, model.getImages(), holder.imageSetCounter);
+            getAndSetImages(holder,model.getImages(), holder.imageSetCounter, new ArrayList<Bitmap>());
         }
+
     }
 
-    private void setImages(@NonNull final MyMultiImageViewHolder holder, Integer s) {
+    private void getAndSetImages(final MyMultiImageViewHolder holder, final List<Integer> imageIdentifiers, final AtomicInteger imageSetCount, final List<Bitmap> bitmaps){
 
-        glide.asBitmap().load(s).into(new CustomTarget<Bitmap>() {
+        glide.asBitmap().load(imageIdentifiers.get(imageSetCount.get())).into(new CustomTarget<Bitmap>() {
+
+            @Override
+            public void onResourceReady(@NonNull Bitmap resource, @Nullable com.bumptech.glide.request.transition.Transition<? super Bitmap> transition) {
+                bitmaps.add(resource);
+                if (imageSetCount.get() < imageIdentifiers.size() - 1){
+                    imageSetCount.getAndIncrement();
+                    getAndSetImages(holder,imageIdentifiers, imageSetCount, bitmaps);
+                } else {
+                    holder.multiImageView.addAllImages(bitmaps);
+                }
+            }
+
+            @Override
+            public void onLoadCleared(@Nullable Drawable placeholder) {
+
+            }
+        });
+    }
+
+    private void setImages(@NonNull final MyMultiImageViewHolder holder, final List<Integer> imageIdentifiers, final AtomicInteger imageSetCount) {
+
+        glide.asBitmap().load(imageIdentifiers.get(imageSetCount.get())).into(new CustomTarget<Bitmap>() {
 
             @Override
             public void onResourceReady(@NonNull Bitmap resource, @Nullable com.bumptech.glide.request.transition.Transition<? super Bitmap> transition) {
                 holder.multiImageView.addImage(resource);
+                if (imageSetCount.get() < imageIdentifiers.size() - 1){
+                    imageSetCount.getAndIncrement();
+                    setImages(holder, imageIdentifiers, imageSetCount);
+                }
             }
 
             @Override
