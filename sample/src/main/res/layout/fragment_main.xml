@@ -5,7 +5,7 @@
     android:id="@+id/fragment_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.stfalcon.multiimageview.sample.MainFragment">
+    tools:context="com.sealstudios.multiimageview.sample.MainFragment">
 
     <LinearLayout
         android:id="@+id/button_layout"
@@ -42,7 +42,7 @@
 
     </LinearLayout>
 
-    <com.stfalcon.multiimageview.MultiImageView
+    <com.sealstudios.multiimageview.MultiImageView
         android:id="@+id/iv"
         android:layout_width="100dp"
         android:layout_height="100dp"

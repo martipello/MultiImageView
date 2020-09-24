@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/mainFragment"
-        android:name="com.stfalcon.multiimageview.sample.MainFragment"
+        android:name="com.sealstudios.multiimageview.sample.MainFragment"
         android:label="Main Fragment">
         <action
             android:id="@+id/action_mainFragment_to_recyclerViewExample"
@@ -16,7 +16,7 @@
     </fragment>
     <fragment
         android:id="@+id/recyclerViewExample"
-        android:name="com.stfalcon.multiimageview.sample.RecyclerViewExample"
+        android:name="com.sealstudios.multiimageview.sample.RecyclerViewExample"
         android:label="Recycler View Example"
         tools:layout="@layout/recycler_view_layout">
         <action
@@ -26,13 +26,13 @@
     </fragment>
     <fragment
         android:id="@+id/previewFragment"
-        android:name="com.stfalcon.multiimageview.sample.PreviewFragment"
+        android:name="com.sealstudios.multiimageview.sample.PreviewFragment"
         android:label="Preview"
         tools:layout="@layout/preview_layout">
         <argument
             android:name="MultiImageViewModel"
             android:defaultValue="@null"
-            app:argType="com.stfalcon.multiimageview.sample.models.MultiImageViewModel"
+            app:argType="com.sealstudios.multiimageview.sample.models.MultiImageViewModel"
             app:nullable="true" />
     </fragment>
 </navigation>

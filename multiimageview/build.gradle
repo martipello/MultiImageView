@@ -1,5 +1,4 @@
 apply plugin: 'com.android.library'
-apply plugin: 'com.novoda.bintray-release'
 apply plugin: 'kotlin-android'
 
 android {
@@ -29,9 +28,6 @@ buildscript {
     repositories {
         jcenter()
     }
-    dependencies {
-        classpath 'com.novoda:bintray-release:0.9.1'
-    }
 }
 
 dependencies {
@@ -39,7 +35,7 @@ dependencies {
     androidTestImplementation('androidx.test.espresso:espresso-core:3.1.0', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    implementation 'androidx.appcompat:appcompat:1.1.0'
+    implementation 'androidx.appcompat:appcompat:1.2.0'
     testImplementation 'junit:junit:4.12'
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 
@@ -48,14 +44,4 @@ repositories {
     mavenCentral()
 }
 
-publish {
-    userOrg = 'stfalcon'
-    groupId = 'com.github.stfalcon'
-    artifactId = 'multiimageview'
-    publishVersion = '0.1'
-    desc = 'Library for display a few images in one MultiImageView like avatar of group chat'
-//    licences = ['Apache-2.0']
-    uploadName='MultiImageView'
-    website = 'https://github.com/stfalcon-studio/MultiImageView.git'
-}
 
